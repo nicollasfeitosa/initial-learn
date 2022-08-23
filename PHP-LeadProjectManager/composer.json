@@ -1,0 +1,25 @@
+{
+    "name": "nicollasdev/lead-project-manager",
+    "authors": [
+        {
+            "name": "Nicollas Feitosa",
+            "email": "contatonicollasfeitosa@gmail.com"
+        }
+    ],
+    "require": {
+        "pimple/pimple": "^3.3",
+        "symfony/http-foundation": "^5.1",
+        "zendframework/zend-eventmanager": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "NicollasDEV\\Framework\\": "src"
+        }
+    },
+    "scripts": {
+        "server": "php -S localhost:80 -t public"
+    },
+    "config": {
+        "process-timeout": 0
+    }
+}

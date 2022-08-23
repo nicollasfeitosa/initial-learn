@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<title>Ajax com jQuery</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>	
+	</head>
+
+	<body>
+
+		<div class="container mt-5">
+
+			<div id="msg">
+
+			</div>
+
+	    	<div class="row">
+	    		<div class="col">
+	    			<form action="app.php" method="">
+	    				<div class="form-group">
+							<input type="text" name="nome" placeholder="Nome" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+							<div class="form-check form-check-inline">
+								<input type="radio" name="sexo" value="feminino" class="form-check-input"><label class="form-check-label mr-3">Feminino</label>
+								<input type="radio" name="sexo" value="masculino" class="form-check-input"><label class="form-check-label mr-3">Masculino</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<input type="text" name="email" placeholder="E-mail" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+							<select name="origem" class="form-control">
+								<option value="">-- Onde nos encontrou? --</option>
+								<option value="facebook">Facebook</option>
+								<option value="google">Google</option>
+								<option value="outro_meio">Outro meio</option>
+							</select>
+						</div>
+						
+						<div class="form-group">
+							<div class="form-check form-check-inline">
+								<input type="checkbox" name="interesses[]" value="php" class="form-check-input"><label class="form-check-label mr-3">PHP</label>
+								<input type="checkbox" name="interesses[]" value="js" class="form-check-input"><label class="form-check-label mr-3">JavaScript</label>
+								<input type="checkbox" name="interesses[]" value="NodeJS" class="form-check-input"><label class="form-check-label mr-3">NodeJS</label>
+								<input type="checkbox" name="interesses[]" value="MongoDB" class="form-check-input"><label class="form-check-label mr-3">MongoDB</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<textarea name="mensagem" class="form-control"></textarea>
+						</div>
+						
+						<button type="submit" class="btn btn-primary">Enviar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+ 
+
+		<script>
+			$(document).ready(function () {
+				
+				
+				$('button').click(function (e) { 
+
+					$('.alert').alert('close')
+					
+					e.preventDefault(); // Evita o refresh e o envio do form
+
+					let dados = $('form').serialize(); // Retorna uma String de todos os campos GET
+					let dados2 = $('form').serializeArray(); // Retorna uma Array de todos os campos
+
+					// console.log(dados)
+					// console.log(dados2)
+
+					$.ajax({
+						type: "POST",
+						url: "app.php",
+						data: dados,
+						dataType: "JSON",
+						success: function (response) {
+							console.log(response)
+							alerta(response)
+						},
+						error: function(response){
+
+							console.log(response)
+
+						}
+					});
+					
+				});
+			});
+
+			function alerta(response){
+
+				if($('#responseMSG').length){
+					return
+				}
+
+				let div = $('<div>', {
+					id: 'responseMSG',
+					role: 'alert',
+					class: 'alert alert-'+ response.alertType +' alert-dismissible fade show'
+				}).appendTo('#msg');
+
+				let strong = $('<strong>', {
+					id: 'title',
+				}).appendTo(div);
+
+				let span = $('<span>', {
+					id: 'text',
+				}).appendTo(div);
+
+				let button = $('<button>', {
+					id: 'button',
+					type: 'button',
+					class: 'close'
+
+				}).appendTo(div);
+
+				$('#button').attr("data-dismiss","alert");
+				$('#button').attr("aria-label","Close");
+
+				let spanbutton = $('<span>').appendTo(button);
+
+				spanbutton.attr("aria-hidden","true");
+				spanbutton.html('&times;');
+
+				$('#title').html(response.alertTitle)
+				$('#text').html(response.alertText)
+			
+			}
+		</script>
+
+	</body>
+
+</html>

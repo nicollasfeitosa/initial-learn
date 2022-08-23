@@ -1,0 +1,17 @@
+<h1>Sobre</h1>
+<hr>
+
+<?php
+
+//var_dump($this->view->dados);
+
+foreach($this->view->dados as $indice => $info){
+    echo $info['titulo'];
+    echo "<br>";
+    echo $info['descricao'];
+    echo "<hr>";
+
+
+}
+
+?>

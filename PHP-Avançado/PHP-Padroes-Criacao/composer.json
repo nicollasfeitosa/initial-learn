@@ -1,0 +1,16 @@
+{
+    "name": "nicollasdev/php-padores-criacao",
+    "description": "Somente uma descricao para nao gerar erros",
+    "authors": [
+        {
+            "name": "Nicollas Feitosa",
+            "email": "contatonicollasfeitosa@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "NicollasDEV\\": "src/"
+        }
+    }
+}

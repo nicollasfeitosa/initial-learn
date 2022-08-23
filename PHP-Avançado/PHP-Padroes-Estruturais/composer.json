@@ -1,0 +1,16 @@
+{
+    "name": "nicollasdev/php-padroes-estruturais",
+    "description": "Apenas uma descricao",
+    "authors": [
+        {
+            "name": "Nicollas Feitosa",
+            "email": "contatonicollasfeitosa@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "NicollasDEV\\": "src/"
+        }
+    }
+}

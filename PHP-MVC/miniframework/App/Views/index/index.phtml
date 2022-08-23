@@ -1,0 +1,17 @@
+<h1>Index</h1>
+<hr>
+
+<?php
+
+    //var_dump($this->view->dados);
+
+    foreach($this->view->dados as $indice => $produto){
+        echo $produto['id'];
+        echo "<br/>";
+        echo $produto['descricao'];
+        echo "<br/>";
+        echo $produto['preco'];
+        echo "<hr/>";
+    }
+
+?>

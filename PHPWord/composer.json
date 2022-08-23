@@ -1,0 +1,16 @@
+{
+    "name": "nicollas/feitosa",
+    "description": "Teste do PHP Word",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicollas Feitosa",
+            "email": "contatonicollasfeitosa@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpword": "^0.17.0",
+        "dompdf/dompdf": "^0.8.6"
+    }
+}

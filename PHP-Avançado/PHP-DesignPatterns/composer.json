@@ -1,0 +1,19 @@
+{
+    "name": "start/php-design-patterns",
+    "require-dev": {
+        "phpunit/phpunit": "^9.4"
+    },
+    "authors": [
+        {
+            "name": "Nicollas Feitosa",
+            "email": "contatonicollasfeitosa@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "NicollasDEV\\": "src",
+            "App\\": "app"
+        }
+    }
+}

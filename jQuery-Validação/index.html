@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <title>Validação CPF e CNPJ</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+
+    <div class="container mt-5">
+        <form action="" method="get">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Name" minlength="3" required>
+            </div>
+
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="cpf" id="cpf" placeholder="CPF">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="cnpj" id="cnpj" placeholder="CNPJ">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- jQuery Plugins -->
+    <script src="jquery-validation/jquery.validate.min.js"></script>
+    <script src="jquery-validation/additional-methods.min.js"></script>
+    <script src="jquery-validation/localization/messages_pt_BR.js"></script>
+    <script src="jquery-mask/jquery.mask.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () { 
+            $('#cpf').mask('000.000.000-00', {reverse: false});
+            $('#cnpj').mask('00.000.000/0000-00', {reverse: false});
+        });
+    </script>
+
+    <script>
+        // Plugin: https://jqueryvalidation.org/
+
+        jQuery.validator.addMethod('cpfValidation', function (value) { // CPF VALIDATION
+
+            value = value.replace(/\./g, '');
+            value = value.replace('-', '');
+
+            if (/\D/.test(value)) {
+                console.log('tem letras', value);
+                return false;
+            }
+
+            if (value.length !== 11) {
+                console.log('Tamanho diferente de 11', value.length);
+                return false;
+            }
+
+            if (/^(.)\1+$/.test(value)) {
+                console.log('Caracteres Iguais', value);
+                return false;
+            }
+
+            // Calculo CPF primeiro Digito
+            let primeiroDigito = 0;
+            let peso = 10;
+
+            for (let i = 0; i < 9; i ++){
+                primeiroDigito += value.charAt(i) * peso;
+                --peso;
+            }
+
+            primeiroDigito = 11 - (primeiroDigito % 11);
+
+            if (primeiroDigito > 9) {
+                primeiroDigito = 0;
+            }
+
+            // Calculo CPF segundo Digito
+            let segundoDigito = 0;
+            peso = 11;
+
+            for (let i = 0; i < 10; i ++){
+                segundoDigito += value.charAt(i) * peso;
+                --peso;
+            }
+
+            segundoDigito = 11 - (segundoDigito % 11);
+
+            if (segundoDigito > 9) {
+                segundoDigito = 0;
+            }
+
+            if (value.charAt(9) != primeiroDigito || value.charAt(10) != segundoDigito) {
+                console.log('Digito de verificação inválido: ' + primeiroDigito + '' + segundoDigito)
+                return false;
+            }
+
+            return true;
+
+        }, 'CPF inválido');
+
+        // Validação CNPJ
+
+        jQuery.validator.addMethod('cnpjValidation', function (value) {
+
+        value = value.replace(/\./g, '');
+        value = value.replace('-', '');
+        value = value.replace('/', '');
+
+        if (/\D/.test(value)) {
+            console.log('tem letras', value);
+            return false;
+        }
+
+        if (value.length !== 14) {
+            console.log('Tamanho diferente de 14', value.length);
+            return false;
+        }
+
+        if (/^(.)\1+$/.test(value)) {
+            console.log('Caracteres Iguais', value);
+            return false;
+        }
+
+        // Calculo CNPJ primeiro Digito
+        let primeiroDigito = 0;
+        let peso = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+        for (let i = 0; i < 12; i ++){
+            primeiroDigito += value.charAt(i) * peso[i];
+        }
+
+        primeiroDigito = 11 - (primeiroDigito % 11);
+
+        if (primeiroDigito > 9) {
+            primeiroDigito = 0;
+        }
+
+        // Calculo CNPJ segundo Digito
+        let segundoDigito = 0;
+        peso = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+        for (let i = 0; i < 13; i ++){
+            segundoDigito += value.charAt(i) * peso[i];
+        }
+
+        segundoDigito = 11 - (segundoDigito % 11);
+
+        if (segundoDigito > 9) {
+            segundoDigito = 0;
+        }
+
+        if (value.charAt(12) != primeiroDigito || value.charAt(13) != segundoDigito) {
+            console.log('Digito de verificação inválido: ' + primeiroDigito + '' + segundoDigito)
+            return false;
+        }
+
+        return true;
+
+        }, 'CNPJ inválido');
+
+        $('form').validate({
+            rules: {
+                cpf: {
+                    //cpfValidation: true // Método Criado
+                    cpfBR: true // Método do additional-methods
+                },
+                cnpj: {
+                    //cnpjValidation: true
+                    cnpjBR: true // Método do additional-methods
+                },
+                email: {
+                    email: true
+                },
+            }
+        })
+    </script>
+
+  </body>
+</html>

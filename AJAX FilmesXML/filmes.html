@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <title>Filmes Piratao</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="xmltojson.js"></script>
+    <script>
+        // JavaScript
+
+        function getFilmes(){
+            let xmlHttp = new XMLHttpRequest();
+
+            xmlHttp.open('GET', 'http://localhost/filmes/filmes.xml');
+
+            xmlHttp.onreadystatechange = () => {
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    let XMLFilmes = xmlHttp.responseText
+                    
+                    //convertendo xml para json
+
+                    //convertendo string xml para arvore DOM
+                    let parser = new DOMParser();
+                    domFilmes = parser.parseFromString(XMLFilmes, 'text/xml');
+
+                    //convertendo DOM para json
+                    jsonFilmes = xmlToJson(domFilmes)
+
+                    //console.log(jsonFilmes)
+
+                    for(let i in jsonFilmes['filmes']['filme']){
+
+                        let item = jsonFilmes['filmes']['filme'][i]
+
+                        console.log(item)
+
+                        let divRow = document.createElement('div')
+                        divRow.className = 'row'
+
+                        let divCol = document.createElement('div')
+                        divCol.className = 'col-md'
+
+                        let divCard = document.createElement('div')
+                        divCard.className = 'card mt-5'
+                        divCard.style = 'text-align: center; margin: 0 auto;'
+
+                        let cardBody = document.createElement('div')
+                        cardBody.className = 'card-body'
+
+                        let titulo = document.createElement('h5')
+                        titulo.className = 'card-title'
+                        titulo.innerHTML = '<strong>Título:</strong> ' + item['titulo']['#text']
+
+                        let genero = '';
+                        for(let g in item.genero){
+                            if(genero) genero += ', '
+                                genero += item.genero[g]['#text'] 
+                        }
+
+                        let generoh6 = document.createElement('h6')
+                        generoh6.className = 'card-subtitle mb-2 text-muted'
+                        generoh6.innerHTML = '<strong>Gênero:</strong> ' + genero
+
+                        // Elenco
+                        let elencotext = '';
+                        for(let e in item.elenco.ator){
+                            if(elencotext) elencotext += ', '
+                            elencotext += item.elenco.ator[e]['#text']
+                        }
+
+                        let elenco = document.createElement('h6')
+                        elenco.className = 'card-subtitle mb-2 text-muted'
+                        elenco.innerHTML = '<strong>Elenco:</strong> ' + elencotext
+
+                        let lancamento = document.createElement('h6')
+                        lancamento.className = 'card-subtitle mb-2 text-muted'
+                        lancamento.innerHTML = '<strong>Lançamento:</strong> ' + item.dataLancamento['#text'] + ' (' + item.dataLancamento['@attributes']['pais'] + ')'
+
+                        let resumo = document.createElement('p')
+                        resumo.className = 'card-text'
+                        resumo.innerHTML = '<strong>Resumo do Filme:</strong> <br/>' + item['resumo']['#text']
+
+                        divRow.appendChild(divCol)
+                        divCol.appendChild(divCard)
+                        divCard.appendChild(cardBody)
+                        cardBody.appendChild(titulo)
+                        cardBody.appendChild(generoh6)
+                        cardBody.appendChild(elenco)
+                        cardBody.appendChild(lancamento)
+                        cardBody.appendChild(resumo)
+
+                        document.getElementById('lista').appendChild(divRow)
+
+                    }
+
+                }
+
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 404){
+                    //
+                }               
+            }
+
+            xmlHttp.send();
+        }
+
+    </script>
+   </head>
+  <body>
+
+    <nav class="navbar navbar-light bg-light mb-4">
+        <div class="container">
+            <div class="navbar-brand mb-0 h1">
+                <h3>Catálogo de Filmes</h3>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="lista">
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-success" onclick="getFilmes()">
+                    Listar Filmes
+                </button>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-md">
+                <div class="card mt-5" style="text-align: center; margin: 0 auto;">
+                    <div class="card-body">
+                      <h5 class="card-title"><strong>Título:</strong> </h5>
+                      <h6 class="card-subtitle mb-2 text-muted"><strong>Gênero:</strong> </h6>
+                      <h6 class="card-subtitle mb-2 text-muted"><strong>Elenco:</strong> </h6>
+                      <h6 class="card-subtitle mb-2 text-muted"><strong>Lançamento:</strong> </h6>
+                      <p class="card-text"><strong>Resumo do Filme:</strong> </p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        
+    </div>  
+
+  </body>
+</html>
